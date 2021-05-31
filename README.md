@@ -5,3 +5,5 @@ The touchscreen hype has recently hit the automotive industry. Many manufacturer
 ### Project Description
 This project is a virtual assistant designed to understand car related verbal interactions and minimize the number of distracted drivers. 
 ### Methods
+### Screenshots
+ > ![Sample input/output](https://github.com/piyushmundhra/carAssistant/blob/main/Screen%20Shot%202021-05-31%20at%207.18.57%20AM.png)
