@@ -8,6 +8,8 @@
 > The core idea of the project is nested classification. The first step was to come up with a finite number of classes that encapsulated the different features that can be addressed in a car: Navigation, Music, Air Conditioning, and Inquiries about the car's condition. A factory pattern is used to call the proper processing function. 
 Each of the car features are derivatives of a the abstract class Function, the hotwords member variable is a list of hotwords that are used to in the initial classification (choosing which feature the input string relates to). After this, the factory method is called and the returned object is used for further processing. 
  <img src = https://github.com/piyushmundhra/carAssistant/blob/main/Car%20Assistant%20(2).png/>
+ 
+> The initial classification is made by choosing the feature with the most number of matches: each feature has a list of associated hotwords as a member variable. The vectorizer returns the number of hotwords that found matches in the input sentence. The matches are found using three similarity metrics: SimLex-999, SimVerb-3500, and WordNet synsets. Matches are either 0 or 1. As mentioned before, this classifier can be improved using machine learning and a sufficiently large dataset (possible method: word2vec vectorization into a neural netowrk/MLP). After this classification, the program must process the input.
 
 > The most demanding processing task is with Air Conditioning related commands and inputs. Other features tend to have straightforward inputs with very limited variation. Air Conditioning input processing provides a different challenge due to the variety of sentence structure which may require different processing. Some examples are:
 * It feels hot -> Lowering the temperature
