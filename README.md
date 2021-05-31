@@ -7,7 +7,7 @@
 ### Methods
 > The core idea of the project is nested classification. The first step was to come up with a finite number of classes that encapsulated the different features that can be addressed in a car: Navigation, Music, Air Conditioning, and Inquiries about the car's condition. A factory pattern is used to call the proper processing function. 
 Each of the car features are derivatives of a the abstract class Function, the hotwords member variable is a list of hotwords that are used to in the initial classification (choosing which feature the input string relates to). After this, the factory method is called and the returned object is used for further processing. 
- <img src = https://github.com/cs100/final-project-svole001-jhan136-pund001/blob/master/screenshots/userTaste%20photo.png width="450"/>
+ <img src = https://github.com/piyushmundhra/carAssistant/blob/main/Car%20Assistant%20(1).png width="450"/>
 
 The most demanding processing task is with Navigation related commands and inputs. Other functions tend to have straightforward inputs with very limited variation. Navigation provides a different challenge due to the variety of sentence structure which may require different processing. Some examples are:
 * It feels hot -> Lowering the temperature
