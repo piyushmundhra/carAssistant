@@ -5,22 +5,12 @@ from nltk.stem import WordNetLemmatizer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.chunk import RegexpParser
 from nltk.corpus import stopwords
-import gmaps
-from ipywidgets.embed import embed_minimal_html
-import googlemaps
-import geocoder
-import gmplot
-from bokeh.io import output_file, show
-from bokeh.models import ColumnDataSource, GMapOptions
-from bokeh.plotting import gmap
 import spacy
 
 simlex = pd.read_csv('./project/restructured/data/SimLex-999.txt', sep='\r' ,delimiter='\t')
 
 verbs = pd.read_csv('./project/restructured/data/SimVerb-3500.txt', sep='\r' ,delimiter='\t', header=None)
 verbs.columns = ['word1', 'word2', 'pos', 'similarity', 'notes']
-
-
 
 def tkz(sentence):
     tags = nltk.pos_tag(nltk.word_tokenize(sentence))
@@ -98,11 +88,6 @@ def findTarget(string, regtuple):
                 ret += node[0] + ' '
     return ret
 
-def geocodes(c, t):
-    targetloc = geocoder.google(t, key='apikey')
-    currentloc = geocoder.google(c, key='apikey')
-    return (targetloc, currentloc)
-
 def getSong(string):
     start = string.lower().find('play')
     end = string.lower().find('on')
@@ -127,17 +112,13 @@ def hasSubject(sentence):
 
 def getTargetAc(sentence):
     grammar = '''
-        NP: {<DT|JJ.*|NN.*|>+}       
-        PP: {<IN><NP>}               
-        VP: {<VB.*><NP|PP|CLAUSE|RB>+$} 
-        CLAUSE: {<NP><VP>}           
-        COMMAND: {<VB.*><PRP><VB.*|JJ.*|NP>}
-        STATEMENT: {<PRP><VP>}
-        AMOUNT: {<CD><NP>?} 
-        AMOUNT COMP: {<AMOUNT><VBP>}
-        DESIRE: {<TO><VP>}
-                {<MD><STATEMENT>}
-        #ADDRESS: {<TO><CD>?<NP>}
+        DESIRE: {<VB.*|MP><PRP>}
+        COMMAND: {<JJR|VB.*><PRP|DT>}
+        STATEMENT: {<PRP><VBZ|VBP><RB>?<RB|JJ>}
+        AMOUNT: {<CD><NNS>?}
+        cmp1: {<IN><AMOUNT>}
+        cmp2: {<AMOUNT><VB.*|NN.*>}
+
     '''
     chunker = nltk.RegexpParser(grammar)
     t = chunker.parse(nltk.pos_tag(nltk.word_tokenize(sentence)))
@@ -146,7 +127,19 @@ def getTargetAc(sentence):
     target = 0
     category = ''
     for tree in t.subtrees():
-        if tree.label() == 'COMMAND': 
+        if tree.label() == 'cmp1':
+            target = (tree.leaves())
+            category = 'cmp1'
+            lst[category] = target
+        elif tree.label() == 'cmp2':
+            target = (tree.leaves())
+            category = 'cmp2'
+            lst[category] = target
+        elif tree.label() == 'AMOUNT':
+            target = (tree.leaves())
+            category = 'AMOUNT'
+            lst[category] = target
+        elif tree.label() == 'COMMAND': 
             target = (tree.leaves())
             category = 'COMMAND'
             lst[category] = target
@@ -157,14 +150,6 @@ def getTargetAc(sentence):
         elif tree.label() == 'STATEMENT': 
             target = (tree.leaves())
             category = 'STATEMENT'
-            lst[category] = target
-        elif tree.label() == 'AMOUNT COMP':
-            target = (tree.leaves())
-            category = 'AMOUNT COMP'
-            lst[category] = target
-        elif tree.label() == 'AMOUNT':
-            target = (tree.leaves())
-            category = 'AMOUNT'
             lst[category] = target
         
     return lst

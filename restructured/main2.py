@@ -5,6 +5,7 @@ from functions import Music
 from functions import Qgoog
 from functions import Qmap
 from functions import Question
+from functions import Lights
 from assistantv2 import vectorize
 from assistantv2 import localVectorize
 from assistantv2 import getTargetAc
@@ -29,7 +30,8 @@ ac = Ac()
 navi = Navigation()
 music = Music()
 question = Question()
-lst = [ac, navi, music, question]
+lights = Lights()
+lst = [ac, navi, music, question, lights]
 
 print('\n')
 
